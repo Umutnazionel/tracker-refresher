@@ -1,0 +1,60 @@
+# Bu dosyayı reponuzda şu yola koyun:
+# .github/workflows/refresh-page.yml
+
+name: Refresh Tracker Page
+
+on:
+  schedule:
+    # Her 5 dakikada bir çalışır (7 dakika istiyorsanız "*/7 * * * *" yapın)
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps chromium
+
+      - name: Load page with real browser (F5 gibi)
+        run: |
+          cat << 'EOF' > refresh.js
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            const url = "https://tracker.gg/valorant/profile/riot/DIE%20HARDER%23999/overview?platform=pc&playlist=competitive&season=8102cd81-43a0-d0d7-bd59-47b8fe9bed1b";
+
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+            await page.waitForTimeout(3000); // JS'in tam yüklenmesi için bekle
+
+            await page.screenshot({ path: 'latest-screenshot.png', fullPage: true });
+
+            const timestamp = new Date().toISOString();
+            require('fs').appendFileSync('refresh-log.txt', `${timestamp}: Sayfa yenilendi\n`);
+
+            await browser.close();
+          })();
+          EOF
+          node refresh.js
+
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add latest-screenshot.png refresh-log.txt
+          git diff --quiet && git diff --staged --quiet || git commit -m "Refresh $(date -u)"
+          git push
+        continue-on-error: true
