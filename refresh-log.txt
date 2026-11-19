@@ -436,3 +436,4 @@
 2026-11-19T00:34:15.075Z: Sayfa yenilendi
 2026-11-19T07:53:22.525Z: Sayfa yenilendi
 2026-11-19T17:03:17.174Z: Sayfa yenilendi
+2026-11-19T23:29:34.666Z: Sayfa yenilendi
