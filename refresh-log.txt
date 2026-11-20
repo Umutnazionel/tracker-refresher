@@ -438,3 +438,4 @@
 2026-11-19T17:03:17.174Z: Sayfa yenilendi
 2026-11-19T23:29:34.666Z: Sayfa yenilendi
 2026-11-20T04:13:12.833Z: Sayfa yenilendi
+2026-11-20T12:59:05.931Z: Sayfa yenilendi
