@@ -440,3 +440,4 @@
 2026-11-20T04:13:12.833Z: Sayfa yenilendi
 2026-11-20T12:59:05.931Z: Sayfa yenilendi
 2026-11-20T21:00:02.606Z: Sayfa yenilendi
+2026-11-21T02:05:52.341Z: Sayfa yenilendi
